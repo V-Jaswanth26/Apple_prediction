@@ -19,45 +19,37 @@ preprocessor = None
 data_collector = None
 
 def initialize_model():
-    """
-    Initialize the model and preprocessor
-    """
     global model, preprocessor, data_collector
-    
+
+    if model is not None:
+        return True
+
     try:
-        # Initialize components
         data_collector = AppleStockDataCollector()
         preprocessor = StockDataPreprocessor()
-        
-        # Load the trained model
+
         model_path = "models/apple_stock_lstm_model.h5"
+
         if os.path.exists(model_path):
-            # Get input shape from data
             data = data_collector.load_data()
-            if data is not None:
-                data = preprocessor.handle_missing_values(data)
-                data = preprocessor.add_technical_indicators(data)
-                data = preprocessor.handle_missing_values(data)
-                
-                # Create a sample sequence to get input shape
-                sample_X, _ = preprocessor.create_sequences(data, sequence_length=60)
-                input_shape = (sample_X.shape[1], sample_X.shape[2])
-                
-                # Initialize and load model
-                model = LSTMStockPredictor(input_shape)
-                model.load_model(model_path)
-                
-                print("Model and preprocessor initialized successfully")
-                return True
-            else:
-                print("No data available for initialization")
-                return False
-        else:
-            print(f"Model file not found at {model_path}")
-            return False
-            
+
+            data = preprocessor.handle_missing_values(data)
+            data = preprocessor.add_technical_indicators(data)
+            data = preprocessor.handle_missing_values(data)
+
+            sample_X, _ = preprocessor.create_sequences(data, sequence_length=60)
+            input_shape = (sample_X.shape[1], sample_X.shape[2])
+
+            model = LSTMStockPredictor(input_shape)
+            model.load_model(model_path)
+
+            print("Model loaded ✅")
+            return True
+
+        return False
+
     except Exception as e:
-        print(f"Error initializing model: {str(e)}")
+        print("Error:", e)
         return False
 
 @app.route('/')
@@ -79,16 +71,8 @@ def home():
 
 @app.route('/health')
 def health_check():
-    """
-    Health check endpoint
-    """
-    status = 'healthy' if model is not None else 'unhealthy'
-    
     return jsonify({
-        'status': status,
-        'model_loaded': model is not None,
-        'preprocessor_loaded': preprocessor is not None,
-        'timestamp': datetime.now().isoformat()
+        'status': 'running'
     })
 
 @app.route('/model_info')
