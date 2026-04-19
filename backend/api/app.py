@@ -12,7 +12,6 @@ from core.model import LSTMStockPredictor
 
 app = Flask(__name__)
 CORS(app)
-initialize_model()
 
 # Global variables for model and preprocessor
 model = None
@@ -169,7 +168,7 @@ def predict():
     """
     try:
         if model is None or preprocessor is None:
-            return jsonify({'error': 'Model not initialized'}), 500
+            initialize_model()
         
         # Get data from request (optional, if not provided use latest data)
         request_data = request.get_json()
@@ -220,7 +219,7 @@ def predict_multi():
     """
     try:
         if model is None or preprocessor is None:
-            return jsonify({'error': 'Model not initialized'}), 500
+            initialize_model()
         
         # Get number of days from request
         request_data = request.get_json()
