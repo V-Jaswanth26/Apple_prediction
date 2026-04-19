@@ -6,9 +6,9 @@ import json
 import os
 from datetime import datetime, timedelta
 
-from services.data_collector import AppleStockDataCollector
-from core.preprocessor import StockDataPreprocessor
-from core.model import LSTMStockPredictor
+from backend.services.data_collector import AppleStockDataCollector
+from backend.core.preprocessor import StockDataPreprocessor
+from backend.core.model import LSTMStockPredictor
 
 app = Flask(__name__)
 CORS(app)
