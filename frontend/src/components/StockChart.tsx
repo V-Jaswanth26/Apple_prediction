@@ -53,7 +53,7 @@ const StockChart: React.FC = () => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.get(`http://localhost:5000/history?days=${daysToShow}`);
+      const response = await axios.get(`https://apple-prediction-spyn.onrender.com/history?days=${daysToShow}`);
       setHistoricalData(response.data.data);
     } catch (err) {
       setError('Failed to fetch historical data');
@@ -65,7 +65,7 @@ const StockChart: React.FC = () => {
 
   const fetchPredictions = useCallback(async (days: number = 7) => {
     try {
-      const response = await axios.post('http://localhost:5000/predict_multi', { days });
+      const response = await axios.post('https://apple-prediction-spyn.onrender.com/predict_multi', { days });
       setPredictions(response.data.predictions);
     } catch (err) {
       setError('Failed to fetch predictions');
