@@ -12,6 +12,7 @@ from core.model import LSTMStockPredictor
 
 app = Flask(__name__)
 CORS(app)
+initialize_model()
 
 # Global variables for model and preprocessor
 model = None
@@ -30,7 +31,7 @@ def initialize_model():
         preprocessor = StockDataPreprocessor()
         
         # Load the trained model
-        model_path = "../models/apple_stock_lstm_model.h5"
+        model_path = "models/apple_stock_lstm_model.h5"
         if os.path.exists(model_path):
             # Get input shape from data
             data = data_collector.load_data()
