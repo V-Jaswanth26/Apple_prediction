@@ -334,10 +334,9 @@ def get_analytics():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+
 if __name__ == '__main__':
-    # Initialize model before starting the server
-    if initialize_model():
-        print("Starting Flask server...")
-        app.run(debug=True, host='0.0.0.0', port=5000)
-    else:
-        print("Failed to initialize model. Exiting...")
+    port = int(os.environ.get("PORT", 5000))
+    print("Starting Flask server...")
+    app.run(host='0.0.0.0', port=port)
